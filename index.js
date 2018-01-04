@@ -1,9 +1,12 @@
+'use strict';
+
 const rp = require('request-promise');
 const log = require('debug')('slack-node');
 
 module.exports = class Slack {
-  constructor(webhook){
+  constructor(webhook, from){
     this.webhook = webhook;
+    this.from = from || 'slack-node';
   }
 
   send(message){
@@ -15,7 +18,10 @@ module.exports = class Slack {
         'cache-control': 'no-cache',
         'content-type': 'application/json'
       },
-      body: {'text': message},
+      body: {
+        'text': message,
+        'username': this.from
+      },
       json: true
     };
 
